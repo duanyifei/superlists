@@ -1,12 +1,11 @@
 # coding:utf8
+import time
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import unittest
-
-import time
 
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox(timeout=10)
         # 隐式等待
@@ -22,7 +21,7 @@ class NewVisitorTest(unittest.TestCase):
         return
 
     def test_can_start_a_list_and_retrieve_it_later(self):
-        self.browser.get("http://localhost:8000")
+        self.browser.get(self.live_server_url)
         # 判断标题和头部是否都包含 To-Do
         self.assertIn('To-Do', self.browser.title)
         header_text = self.browser.find_element_by_tag_name("h1").text
@@ -57,8 +56,3 @@ class NewVisitorTest(unittest.TestCase):
         #
         self.fail("Finish the test!")
         return
-
-
-if __name__ == "__main__":
-    # unittest.main(warnings='ignore')
-    unittest.main()
