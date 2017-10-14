@@ -5,7 +5,6 @@ import unittest
 
 
 class NewVisitorTest(unittest.TestCase):
-
     def setUp(self):
         self.browser = webdriver.Firefox()
         # 隐式等待
@@ -34,15 +33,16 @@ class NewVisitorTest(unittest.TestCase):
         # 按下回车键 页面刷新
         # 待办事项表格中显示 "1: Buy peacock feathers"
         inputbox.send_keys(Keys.ENTER)
-        
+
         table = self.browser.find_element_by_id("id_list_table")
         rows = table.find_elements_by_tag_name("tr")
         self.assertTrue(
-            any(row.text == '1: Buy peacock feathers' for row in rows)
+            any(row.text == '1: Buy peacock feathers' for row in rows),
+            "New to-do item did not appear in table"
         )
         self.fail("Finish the test!")
 
 
 if __name__ == "__main__":
-    #unittest.main(warnings='ignore')
+    # unittest.main(warnings='ignore')
     unittest.main()
