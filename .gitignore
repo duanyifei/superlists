@@ -104,3 +104,4 @@ ENV/
 db.sqlite3
 #
 superlists/__pycache__/*.pyc
+.idea/

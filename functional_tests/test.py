@@ -42,6 +42,9 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox.send_keys(Keys.ENTER)
 
         time.sleep(3)
+        # 跳转到新的页面 专属此用户的页面
+        edith_list_url = self.browser.current_url
+        self.assertRegex(edith_list_url, '/lists/.+')
         self.check_for_row_in_list_table('1: Buy peacock feathers')
 
         # 页面中还有一个文本框  继续输入待办事项
@@ -53,6 +56,31 @@ class NewVisitorTest(LiveServerTestCase):
         time.sleep(3)
         self.check_for_row_in_list_table('1: Buy peacock feathers')
         self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
-        #
+
+        # 测试另一用户无法看到上一用户的信息
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
+
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Buy peacock feathers', page_text)
+        self.assertNotIn('make a fly', page_text)
+
+        # 新用户进行输入
+        # 输入一个待办事项
+        inputbox = self.browser.find_element_by_id("id_new_item")
+        inputbox.send_keys("Buy milk")
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(3)
+
+        francis_list_url = self.browser.current_url
+        self.assertRegex(francis_list_url, '/lists/.+')
+        self.assertNotEqual(francis_list_url, edith_list_url)
+
+        # 测试此页面仅显示 新用户信息
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Buy peacock feathers', page_text)
+        self.assertIn('Buy milk', page_text)
+
         self.fail("Finish the test!")
         return
