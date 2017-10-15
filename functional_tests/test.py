@@ -22,6 +22,7 @@ class NewVisitorTest(LiveServerTestCase):
 
     def test_can_start_a_list_and_retrieve_it_later(self):
         self.browser.get(self.live_server_url)
+        self.browser.set_window_size(1024, 768)
         # 判断标题和头部是否都包含 To-Do
         self.assertIn('To-Do', self.browser.title)
         header_text = self.browser.find_element_by_tag_name("h1").text
@@ -33,6 +34,10 @@ class NewVisitorTest(LiveServerTestCase):
             inputbox.get_attribute("placeholder"),
             "Enter a to-do item"
         )
+        # 测试 输入框居中显示
+        self.assertAlmostEqual(inputbox.location['x'] + inputbox.size['width'] / 2,
+                               512,
+                               delta=5)
 
         # 输入 "Buy peacock feathers"
         inputbox.send_keys("Buy peacock feathers")
@@ -49,6 +54,11 @@ class NewVisitorTest(LiveServerTestCase):
 
         # 页面中还有一个文本框  继续输入待办事项
         inputbox = self.browser.find_element_by_id("id_new_item")
+        # 测试 输入框居中显示
+        self.assertAlmostEqual(inputbox.location['x'] + inputbox.size['width'] / 2,
+                               512,
+                               delta=5)
+
         # 输入 "Use peacock feathers to make a fly"
         inputbox.send_keys("Use peacock feathers to make a fly")
         inputbox.send_keys(Keys.ENTER)
