@@ -1,4 +1,5 @@
 # coding:utf8
+import sys
 import time
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
@@ -6,6 +7,21 @@ from selenium.webdriver.common.keys import Keys
 
 
 class NewVisitorTest(StaticLiveServerTestCase):
+    @classmethod
+    def setUpClass(cls):
+        for arg in sys.argv:
+            if 'liveserver' in arg:
+                cls.server_url = "http://" + arg.split("=")[1]
+                return
+            super().setUpClass()
+            cls.server_url = cls.live_server_url
+
+    @classmethod
+    def tearDownClass(cls):
+        if cls.server_url == cls.live_server_url:
+            super().tearDownClass()
+
+
     def setUp(self):
         self.browser = webdriver.Firefox(timeout=10)
         # 隐式等待
@@ -21,7 +37,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         return
 
     def test_can_start_a_list_and_retrieve_it_later(self):
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
         self.browser.set_window_size(1024, 768)
         # 判断标题和头部是否都包含 To-Do
         self.assertIn('To-Do', self.browser.title)
@@ -71,7 +87,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.browser.quit()
         self.browser = webdriver.Firefox()
 
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Buy peacock feathers', page_text)
         self.assertNotIn('make a fly', page_text)
