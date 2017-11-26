@@ -42,6 +42,8 @@ class NewVisitorTest(FunctionalTest):
 
         time.sleep(1)
         self.check_for_row_in_list_table('1: Buy peacock feathers')
+        # todo 卡一下？？？
+        time.sleep(5)
         self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
 
         # 测试另一用户无法看到上一用户的信息
