@@ -23,5 +23,4 @@ urlpatterns = [
     url(r'^$', lists.views.home_page),
     url(r'^new$', lists.views.new_list),
     url(r'^(\d+)/$', lists.views.view_list),
-    url(r'^(\d+)/add_item$', lists.views.add_item),
 ]

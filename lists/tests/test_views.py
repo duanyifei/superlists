@@ -70,17 +70,15 @@ class NewListTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'home.html')
         expected_error = escape("You can't have an empty list item")
-        print(response.content.decode())
+        # print(response.content.decode())
         self.assertContains(response, expected_error)
         return
 
-
-class NewItemTest(TestCase):
     def test_can_save_a_POST_request_to_an_existing_list(self):
         other_list = List.objects.create()
         correct_list = List.objects.create()
 
-        self.client.post('/lists/%s/add_item' % correct_list.id,
+        self.client.post('/lists/%s/' % correct_list.id,
                          data={'item_text': 'A new item fro an exists list'}
                          )
         self.assertEqual(Item.objects.count(), 1)
@@ -89,11 +87,11 @@ class NewItemTest(TestCase):
         self.assertEqual(new_item.list, correct_list)
         return
 
-    def test_redirects_to_list_view(self):
+    def test_POST_redirects_to_list_view(self):
         other_list = List.objects.create()
         correct_list = List.objects.create()
 
-        response = self.client.post('/lists/%s/add_item' % correct_list.id,
+        response = self.client.post('/lists/%s/' % correct_list.id,
                                     data={'item_text': 'A new item fro an exists list'}
                                     )
         self.assertRedirects(response, '/lists/%s/' % correct_list.id)
