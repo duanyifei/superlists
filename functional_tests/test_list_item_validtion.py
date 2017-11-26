@@ -10,7 +10,7 @@ class ItemValidationTest(FunctionalTest):
         self.browser.find_element_by_id("id_new_item").send_keys("\n")
         # 首页刷新 显示错误消息
         # 待办事项不能为空
-        error = self.browser.find_element_by_css_selector(".has_error")
+        error = self.browser.find_element_by_css_selector(".has-error")
         self.assertEqual(error.text, "You can't have an empty list item")
 
         # 输入文字 再次提交 没问题
