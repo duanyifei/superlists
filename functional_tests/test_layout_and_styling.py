@@ -10,7 +10,7 @@ class LayoutAndStylingTest(FunctionalTest):
         self.browser.set_window_size(1024, 768)
 
         # 输入一个待办事项
-        inputbox = self.browser.find_element_by_id("id_new_item")
+        inputbox = self.get_item_input_box()
         # 测试 输入框居中显示
         self.assertAlmostEqual(inputbox.location['x'] + inputbox.size['width'] / 2,
                                512,
@@ -29,7 +29,7 @@ class LayoutAndStylingTest(FunctionalTest):
         self.check_for_row_in_list_table('1: Buy peacock feathers')
 
         # 页面中还有一个文本框  继续输入待办事项
-        inputbox = self.browser.find_element_by_id("id_new_item")
+        inputbox = self.get_item_input_box()
         # 测试 输入框居中显示
         self.assertAlmostEqual(inputbox.location['x'] + inputbox.size['width'] / 2,
                                512,
