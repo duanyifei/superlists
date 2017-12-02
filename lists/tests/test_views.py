@@ -1,27 +1,46 @@
 # coding:utf8
+import re
+from django.template.loader import render_to_string
+from django.http import HttpRequest
 from django.urls import resolve
 from django.test import TestCase
 from django.utils.html import escape
 
 from lists.views import home_page
 from lists.models import Item, List
+from lists.forms import ItemForm
 
 
 # Create your tests here.
 class HomePageTest(TestCase):
-    def test_root_url_resolves_to_home_page_view(self):
-        found = resolve("/")
-        self.assertEqual(found.func, home_page)
+    # maxDiff = None
+    # def test_root_url_resolves_to_home_page_view(self):
+    #     found = resolve("/")
+    #     self.assertEqual(found.func, home_page)
+    #     return
+    #
+    # def test_home_page_return_correct_html(self):
+    #     # 令牌不一致 导致无法测试
+    #     def del_csrf(text):
+    #         """去除 csrftoken 影响"""
+    #         text = re.sub("<input[^>]+name=[\'\"]csrfmiddlewaretoken[\'\"][^>]+>", "", text)
+    #         return text
+    #
+    #     request = HttpRequest()
+    #     response = home_page(request)
+    #     expected_html = render_to_string("home.html", context={'form': ItemForm()}, request=request)
+    #     # self.assertEqual(del_csrf(response.content.decode()), del_csrf(expected_html))
+    #     self.assertMultiLineEqual(del_csrf(response.content.decode()), del_csrf(expected_html))
+    #     return
+
+    def test_home_page_renders_home_template(self):
+        response = self.client.get('/')
+        self.assertTemplateUsed(response, 'home.html')
         return
 
-    def test_home_page_return_correct_html(self):
-        # 令牌不一致 导致无法测试
-        # request = HttpRequest()
-        # response = home_page(request)
-        # expected_html = render_to_string("home.html", request=request)
-        # # print(expected_html)
-        # # print(response.content.decode())
-        # self.assertEqual(response.content.decode(), expected_html)
+    def test_home_page_uses_item_form(self):
+        response = self.client.get('/')
+        self.assertIsInstance(response.context['form'], ItemForm)
         return
 
 
