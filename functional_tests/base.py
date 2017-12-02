@@ -20,6 +20,7 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox(timeout=10)
+        # self.browser = webdriver.Chrome()
         # 隐式等待
         self.browser.implicitly_wait(10)
 
